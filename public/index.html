@@ -25,19 +25,9 @@
         </section>
 
         <section id="authentication">
-          <form onsubmit="stopSubmit(event)">
-            <section id="inputUsername">
-              <label for="username">Username</label>
-              <input type="text" name="username" autocomplete="username webauthn" autofocus />
-              <br />
-              <label for="password">Password</label>
-              <input type="password" name="password" autocomplete="current-password webauthn" />
-              <br />
-            </section>
-            <button id="btnAuthBegin">
-              <strong>🔐&nbsp;Authenticate</strong>
-            </button>
-          </form>
+          <button id="btnAuthBegin">
+            <strong>🔐&nbsp;Authenticate</strong>
+          </button>
           <p id="authSuccess" class="success"></p>
           <p id="authError" class="error"></p>
           <details open>
@@ -51,10 +41,6 @@
     </div>
     <script>
       const { startAuthentication, browserSupportsWebAuthn, startRegistration } = SimpleWebAuthnBrowser;
-
-      function stopSubmit(event) {
-        event.preventDefault();
-      }
 
       /**
        * A simple way to control how debug content is written to a debug console element
@@ -73,10 +59,6 @@
         document.querySelector('.systemError').innerText =
           "It seems this browser doesn't support WebAuthn...";
       } else {
-        function hideAuthForm() {
-          document.getElementById('inputUsername').style.display = 'none';
-        }
-
         /**
          * Registration
          */
@@ -97,8 +79,6 @@
             const opts = await resp.json();
 
             printDebug(elemDebug, 'Registration Options', JSON.stringify(opts, null, 2));
-
-            hideAuthForm();
 
             attResp = await startRegistration({ optionsJSON: opts });
             printDebug(elemDebug, 'Registration Response', JSON.stringify(attResp, null, 2));
@@ -151,8 +131,6 @@
           try {
             const opts = await resp.json();
             printDebug(elemDebug, 'Authentication Options', JSON.stringify(opts, null, 2));
-
-            hideAuthForm();
 
             asseResp = await startAuthentication({ optionsJSON: opts });
             printDebug(elemDebug, 'Authentication Response', JSON.stringify(asseResp, null, 2));
